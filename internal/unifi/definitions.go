@@ -16,7 +16,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"limit":  {Type: "integer", Description: "Maximum number of local sites to return"},
 				"offset": {Type: "integer", Description: "Number of local sites to skip for pagination"},
 			},
@@ -36,7 +36,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id": {Type: "string", Description: "The site ID the adopted devices belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"limit":   {Type: "integer", Description: "Maximum number of adopted devices to return"},
 				"offset":  {Type: "integer", Description: "Number of adopted devices to skip for pagination"},
@@ -58,7 +58,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id":   {Type: "string", Description: "The site ID the adopted device belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"device_id": {Type: "string", Description: "The adopted device ID to retrieve", Format: "123e4567-e89b-12d3-a456-426614174000"},
 			},
@@ -79,7 +79,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id": {Type: "string", Description: "The site ID to query connected clients for", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"limit":   {Type: "integer", Description: "Maximum number of connected clients to return per page"},
 				"offset":  {Type: "integer", Description: "Number of connected clients to skip for pagination"},
@@ -101,7 +101,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id":   {Type: "string", Description: "The site ID the connected client belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"client_id": {Type: "string", Description: "The connected client ID to retrieve", Format: "123e4567-e89b-12d3-a456-426614174000"},
 			},
@@ -122,7 +122,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id": {Type: "string", Description: "The site ID to query networks for", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"limit":   {Type: "integer", Description: "Maximum number of networks to return per page"},
 				"offset":  {Type: "integer", Description: "Number of networks to skip for pagination"},
@@ -144,7 +144,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id":    {Type: "string", Description: "The site ID the network belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"network_id": {Type: "string", Description: "The network ID to retrieve", Format: "123e4567-e89b-12d3-a456-426614174000"},
 			},
@@ -165,7 +165,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id": {Type: "string", Description: "The site ID to query wifi broadcasts for", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"limit":   {Type: "integer", Description: "Maximum number of wifi broadcasts to return per page"},
 				"offset":  {Type: "integer", Description: "Number of wifi broadcasts to skip for pagination"},
@@ -187,7 +187,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id":           {Type: "string", Description: "The site ID the wifi broadcast belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"wifi_broadcast_id": {Type: "string", Description: "The wifi broadcast ID to retrieve", Format: "123e4567-e89b-12d3-a456-426614174000"},
 			},
@@ -208,7 +208,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id": {Type: "string", Description: "The site ID to query firewall zones for", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"limit":   {Type: "integer", Description: "Maximum number of firewall zones to return per page"},
 				"offset":  {Type: "integer", Description: "Number of firewall zones to skip for pagination"},
@@ -230,7 +230,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id":          {Type: "string", Description: "The site ID the firewall zone belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"firewall_zone_id": {Type: "string", Description: "The firewall zone ID to retrieve", Format: "123e4567-e89b-12d3-a456-426614174000"},
 			},
@@ -251,7 +251,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id": {Type: "string", Description: "The site ID to query firewall policies for", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"limit":   {Type: "integer", Description: "Maximum number of firewall policies to return per page"},
 				"offset":  {Type: "integer", Description: "Number of firewall policies to skip for pagination"},
@@ -273,7 +273,7 @@ var toolDefinitions = map[string]plugins.ToolDefinition{
 		},
 		Parameters: plugins.ToolParameters{
 			Type: "object",
-			Properties: map[string]plugins.ToolProperties{
+			Properties: map[string]plugins.ToolProperty{
 				"site_id":            {Type: "string", Description: "The site ID the firewall policy belongs to", Format: "123e4567-e89b-12d3-a456-426614174000"},
 				"firewall_policy_id": {Type: "string", Description: "The firewall policy ID to retrieve", Format: "123e4567-e89b-12d3-a456-426614174000"},
 			},
