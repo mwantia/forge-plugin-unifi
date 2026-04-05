@@ -2,15 +2,12 @@ package unifi
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	hclog "github.com/hashicorp/go-hclog"
 	"github.com/mitchellh/mapstructure"
-	"github.com/mwantia/forge-sdk/pkg/errors"
 	"github.com/mwantia/forge-sdk/pkg/plugins"
 )
 
@@ -22,18 +19,17 @@ const (
 )
 
 type UnifiDriver struct {
-	plugins.UnimplementedToolsPlugin
+	plugins.UnimplementedDriver
 	log    hclog.Logger
 	config *UnifiConfig
 	client *http.Client
 }
 
 type UnifiConfig struct {
-	Address         string   `mapstructure:"address"`
-	APIKey          string   `mapstructure:"api_key"`
-	Timeout         string   `mapstructure:"timeout"`
-	InsecureSkipTLS bool     `mapstructure:"insecure_skip_tls"`
-	Tools           []string `mapstructure:"tools"`
+	Address         string `mapstructure:"address"`
+	APIKey          string `mapstructure:"api_key"`
+	Timeout         string `mapstructure:"timeout"`
+	InsecureSkipTLS bool   `mapstructure:"insecure_skip_tls"`
 }
 
 func NewUnifiDriver(log hclog.Logger) plugins.Driver {
@@ -55,11 +51,13 @@ func (d *UnifiDriver) ProbePlugin(ctx context.Context) (bool, error) {
 	if d.config == nil {
 		return false, fmt.Errorf("plugin not configured")
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, d.baseURL()+"/sites", nil)
+
+	url := LocalBaseUrl(d.config.Address) + "/sites"
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return false, fmt.Errorf("failed to build probe request: %w", err)
 	}
-	d.setHeaders(req)
+	SetHttpAPIHeaders(req, d.config.APIKey)
 
 	resp, err := d.client.Do(req)
 	if err != nil {
@@ -106,61 +104,13 @@ func (d *UnifiDriver) ConfigDriver(ctx context.Context, config plugins.PluginCon
 	if cfg.Timeout == "" {
 		cfg.Timeout = "30s"
 	}
-	timeout, err := time.ParseDuration(cfg.Timeout)
-	if err != nil {
-		return fmt.Errorf("invalid timeout %q: %w", cfg.Timeout, err)
-	}
-	if len(cfg.Tools) == 0 {
-		cfg.Tools = defaultTools()
-	}
 
 	d.config = cfg
-	d.client = &http.Client{
-		Timeout: timeout,
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: cfg.InsecureSkipTLS, //nolint:gosec
-			},
-		},
-	}
 
-	d.log.Info("UniFi configured", "address", cfg.Address, "tools", cfg.Tools, "insecure_skip_tls", cfg.InsecureSkipTLS)
+	d.log.Info("UniFi configured", "address", cfg.Address, "insecure_skip_tls", cfg.InsecureSkipTLS)
 	return nil
 }
 
-func (d *UnifiDriver) GetProviderPlugin(ctx context.Context) (plugins.ProviderPlugin, error) {
-	return nil, errors.ErrPluginNotSupported
-}
-
-func (d *UnifiDriver) GetMemoryPlugin(ctx context.Context) (plugins.MemoryPlugin, error) {
-	return nil, errors.ErrPluginNotSupported
-}
-
-func (d *UnifiDriver) GetChannelPlugin(ctx context.Context) (plugins.ChannelPlugin, error) {
-	return nil, errors.ErrPluginNotSupported
-}
-
 func (d *UnifiDriver) GetToolsPlugin(ctx context.Context) (plugins.ToolsPlugin, error) {
-	return d, nil
-}
-
-func (d *UnifiDriver) GetSandboxPlugin(_ context.Context) (plugins.SandboxPlugin, error) {
-	return nil, errors.ErrPluginNotSupported
-}
-
-func (d *UnifiDriver) baseURL() string {
-	return d.config.Address + "/proxy/network/integration/v1"
-}
-
-func (d *UnifiDriver) setHeaders(req *http.Request) {
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("X-API-Key", d.config.APIKey)
-}
-
-func defaultTools() []string {
-	tools := make([]string, 0, len(toolDefinitions))
-	for name := range toolDefinitions {
-		tools = append(tools, name)
-	}
-	return tools
+	return NewUnifiToolPlugin(d)
 }
