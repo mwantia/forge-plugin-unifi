@@ -54,7 +54,7 @@ func (p *UnifiToolPlugin) GetLifecycle() plugins.Lifecycle {
 func (p *UnifiToolPlugin) ListTools(_ context.Context, filter plugins.ListToolsFilter) (*plugins.ListToolsResponse, error) {
 	tools := make([]plugins.ToolDefinition, 0)
 	for _, def := range toolDefinitions {
-		if p.matchToolFilter(def, filter) {
+		if plugins.MatchesToolsFilter(def, filter) {
 			tools = append(tools, def)
 		}
 	}
@@ -62,27 +62,6 @@ func (p *UnifiToolPlugin) ListTools(_ context.Context, filter plugins.ListToolsF
 	return &plugins.ListToolsResponse{
 		Tools: tools,
 	}, nil
-}
-
-func (p *UnifiToolPlugin) matchToolFilter(def plugins.ToolDefinition, f plugins.ListToolsFilter) bool {
-	if def.Deprecated && !f.Deprecated {
-		return false
-	}
-	if f.Prefix != "" && !strings.HasPrefix(def.Name, f.Prefix) {
-		return false
-	}
-	if len(f.Tags) > 0 {
-		for _, want := range f.Tags {
-			for _, have := range def.Tags {
-				if have == want {
-					goto tagMatched
-				}
-			}
-		}
-		return false
-	tagMatched:
-	}
-	return true
 }
 
 func (p *UnifiToolPlugin) GetTool(_ context.Context, name string) (*plugins.ToolDefinition, error) {
